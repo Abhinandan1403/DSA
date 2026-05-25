@@ -7,7 +7,7 @@ public:
         return res;
     }
 
-    void solve(vector<int>& candidates, int idx, int target){
+    void solve(vector<int>& candidates, int idx, int& target){
         if(idx == candidates.size()){
             if(target == 0){
                 res.push_back(ans);
@@ -19,7 +19,9 @@ public:
 
         //take
         ans.push_back(candidates[idx]);
-        solve(candidates, idx, target-candidates[idx]);
+        target-=candidates[idx];
+        solve(candidates, idx, target);
+        target+=candidates[idx];
         ans.pop_back();
 
         solve(candidates, idx+1, target);
