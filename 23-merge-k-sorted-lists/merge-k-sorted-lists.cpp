@@ -16,21 +16,21 @@ public:
         priority_queue<p, vector<p>, greater<p>>pq;
         for(auto node : lists){
             if(node){
-                pq.push({node->val, node->next});
+                pq.push({node->val, node});
             }
         }
 
-        ListNode* head = new ListNode(0) ;
+        ListNode* head = new ListNode(-1) ;
         ListNode* curr = head ;
 
         while(!pq.empty()){
             auto it = pq.top();
             pq.pop();
-            curr->next = new ListNode(it.first);
+            curr->next = it.second;
             curr = curr->next ;
-            ListNode* n = it.second ;
+            ListNode* n = it.second->next ;
             if(n){
-                pq.push({n->val, n->next});
+                pq.push({n->val, n});
             }
         }
 
