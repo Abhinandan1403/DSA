@@ -23,7 +23,7 @@ public:
         ListNode* head = new ListNode(0) ;
         ListNode* curr = head ;
 
-        while(pq.size()){
+        while(!pq.empty()){
             auto it = pq.top();
             pq.pop();
             curr->next = new ListNode(it.first);
