@@ -18,27 +18,23 @@ public:
         }
 
         TreeNode* curr = root ;
+        TreeNode* par = NULL ;
         while(curr){
             if(curr->val<val){
-                if(curr->right){
-                    curr = curr->right;
-                }
-                else{
-                    curr->right = new TreeNode(val);
-                    return root;
-                }
+                par = curr ;
+                curr = curr->right;
             }
             else{
-                if(curr->left){
-                    curr = curr->left;
-                }
-                else{
-                    curr->left = new TreeNode(val);
-                    return root;
-                }
+                par = curr ;
+                curr = curr->left;
             }
         }
-
+        if(par->val>val){
+            par->left = new TreeNode(val);
+        }
+        else{
+            par->right = new TreeNode(val);
+        }
         return root;
     }
 };
