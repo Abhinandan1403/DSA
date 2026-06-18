@@ -32,9 +32,8 @@ public:
         }
 
         else if (p[idx2] == '*') {
-            for (int i = 0; i <= idx1 + 1; i++) {
-                ans |= solve(idx1 - i, idx2 - 1, s, p, dp);
-            }
+            ans = solve(idx1, idx2 - 1, s, p, dp) ||
+                  solve(idx1 - 1, idx2, s, p, dp);
         }
 
         else if (p[idx2] == '?') {
