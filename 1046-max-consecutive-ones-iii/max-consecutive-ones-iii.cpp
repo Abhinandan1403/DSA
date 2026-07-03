@@ -6,13 +6,15 @@ public:
             if(nums[i] == 0){
                 zeros++;
             }
-            while(zeros > k){
+            if(zeros > k){
                 if(nums[l] == 0){
                     zeros--;
                 }
                 l++;
             }
-            maxL = max(maxL, i-l+1);
+            if(zeros<=k){
+                maxL = max(maxL, i-l+1);
+            }
         }
         return maxL ;
     }
