@@ -3,4 +3,4 @@
 
 SELECT name
 FROM Customer
-WHERE COALESCE(referee_id, 0) != 2;
+WHERE referee_id IS NULL OR referee_id <> 2;
