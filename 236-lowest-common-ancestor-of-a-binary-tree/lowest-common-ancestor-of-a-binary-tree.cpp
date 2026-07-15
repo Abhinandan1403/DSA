@@ -10,33 +10,11 @@
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if (root == p || root == q)
-            return root;
-        if (!root)
-            return NULL;
+        if(!root || root == p || root == q)return root;
 
-        TreeNode* lh = find(root->left, p, q);
-        TreeNode* rh = find(root->right, p, q);
+        TreeNode* lh = lowestCommonAncestor(root->left, p, q);
+        TreeNode* rh = lowestCommonAncestor(root->right, p, q);
 
-        if (lh && rh)
-            return root;
-        return rh == NULL ? lh : rh;
-    }
-
-    TreeNode* find(TreeNode* root, TreeNode* p, TreeNode* q) {
-
-        if (!root)
-            return NULL;
-
-        if (root == p || root == q) {
-            return root;
-        }
-
-        TreeNode* lh = find(root->left, p, q);
-        TreeNode* rh = find(root->right, p, q);
-
-        if (lh && rh)
-            return root;
-        return rh == NULL ? lh : rh;
+        return lh && rh ? root : (lh ? lh : rh);
     }
 };
