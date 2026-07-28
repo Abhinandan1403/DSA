@@ -1,15 +1,12 @@
 class Solution {
 public:
-    string smallestPalindrome(string ss) {
+    string smallestPalindrome(string& ss) {
         vector<int>freq(26, 0);
         for(char &ch : ss){
             freq[ch-'a']++;
         }
 
-        string res = "";
-        for(int i = 0 ; i<ss.length() ; i++){
-            res+=' ';
-        }
+        string res(ss.length(), ' ');
         int s = 0, e = ss.length()-1, mid = s + (e-s)/2;
         for(int i = 0 ; i<26 ; i++){
             if(freq[i]==0)continue;
