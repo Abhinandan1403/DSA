@@ -1,33 +1,17 @@
 class Solution {
 public:
-    int rob(vector<int>& nums) {
-        vector<int>dp(nums.size()+1, 0);
+    int solve(int i, vector<int>& nums, vector<int>& dp) {
+        if (i >= nums.size())
+            return 0;
+        if (dp[i] != -1)
+            return dp[i];
+        int pick = nums[i] + solve(i + 2, nums, dp);
+        int notpick = solve(i + 1, nums, dp);
 
-        for(int idx = nums.size()-1 ; idx>=0 ; idx--){
-            int pick = nums[idx] ;
-            if(idx+2<nums.size()){
-                pick+=dp[idx+2];
-            }
-            int notPick = INT_MIN ;
-            if(idx+1<nums.size()){
-                notPick = dp[idx+1];
-            }
-
-            dp[idx] = max(pick, notPick);
-        }
-        return dp[0];
-
-        // return solve(0, nums, dp);
+        return dp[i] = max(pick, notpick);
     }
-
-    int solve(int idx, vector<int>& nums, vector<int>& dp){
-        if(idx >= nums.size())return 0 ;
-
-        if(dp[idx]!=-1)return dp[idx];
-
-        int pick = nums[idx] + solve(idx+2, nums, dp);
-        int notPick = solve(idx+1, nums, dp);
-
-        return dp[idx] = max(pick, notPick);
+    int rob(vector<int>& nums) {
+        vector<int> dp(nums.size(), -1);
+         return solve(0, nums, dp);
     }
 };
