@@ -3,22 +3,35 @@ public:
     int lengthOfLIS(vector<int>& nums) {
         int prev = -1;
         int n = nums.size();
-        vector<vector<int>>dp(n+3, vector<int>(n+3, 0));
+        // vector<vector<int>>dp(n+3, vector<int>(n+3, 0));
 
-        for(int prev = n-2 ; prev>=-1 ; prev--){
-            for(int idx = n-1 ; idx>prev ; idx--){
+        // for(int prev = n-2 ; prev>=-1 ; prev--){
+        //     for(int idx = n-1 ; idx>prev ; idx--){ 
 
-                int pick = INT_MIN;
-                if(prev == -1 || nums[prev]<nums[idx]){
-                    pick = 1 + dp[idx+1][idx+1];
-                }
-                int notPick = dp[prev+1][idx+1];
+        //         int pick = INT_MIN;
+        //         if(prev == -1 || nums[prev]<nums[idx]){
+        //             pick = 1 + dp[idx+1][idx+1];
+        //         }
+        //         int notPick = dp[prev+1][idx+1];
 
-                dp[prev+1][idx]=max(pick, notPick);
+        //         dp[prev+1][idx]=max(pick, notPick);
+        //     }
+        // }
+
+        // return dp[0][0];
+
+        vector<int>res;
+        for(int i = 0 ; i<n ; i++){
+            if(res.empty() || res.back()<nums[i]){
+                res.push_back(nums[i]);
+            }
+            else{
+                int idx = lower_bound(res.begin(), res.end(), nums[i]) - res.begin();
+                res[idx] = nums[i];
             }
         }
 
-        return dp[0][0];
+        return res.size();
 
         // return solve(prev, 0, nums, dp);
     }
