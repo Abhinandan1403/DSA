@@ -2,49 +2,26 @@ class Solution {
 public:
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
-        vector<vector<vector<int>>>dp(n+1, vector<vector<int>>(2, vector<int>(3, 0)));
-
-        for(int idx = n-1 ; idx >=0 ; idx--){
-            for(int buy = 0 ; buy<2 ; buy++){
-                for(int total = 1 ; total>=0 ; total--){
-                    int profit = 0 ;
-
-                    if(!buy){
-                        profit = max(dp[idx+1][0][total], -prices[idx]+dp[idx+1][1][total]);
-                    }
-                    else{
-                        profit = max(dp[idx+1][1][total], prices[idx]+dp[idx+1][0][total+1]);
-                    }
-
-                    dp[idx][buy][total] = profit ;
-                }
-            }
-        }
-
-        return dp[0][0][0];
-
-
-        // return solve(prices, 0, 0, 0, dp);
+        vector<vector<vector<int>>> dp(
+            n + 1, vector<vector<int>>(3, vector<int>(3, -1)));
+        return solve(0, 2, 1, prices, dp);
     }
 
-    // int solve(vector<int>& prices, int idx, int buy, int total, vector<vector<vector<int>>>&dp){
-    //     if(idx == prices.size() || total == 2){
-    //         return 0 ;
-    //     }
-
-    //     if( dp[idx][buy][total] != -1 ){
-    //         return dp[idx][buy][total];
-    //     }
-
-    //     int profit = 0 ;
-
-    //     if(!buy){
-    //         profit = max(solve(prices, idx+1, 0, total, dp), -prices[idx]+solve(prices, idx+1, 1, total, dp));
-    //     }
-    //     else{
-    //         profit = max(solve(prices, idx+1, 1, total, dp), prices[idx]+solve(prices, idx+1, 0, total+1, dp));
-    //     }
-
-    //     return dp[idx][buy][total] = profit ;
-    // }
+    int solve(int i, int k, int flag, vector<int>& p,
+              vector<vector<vector<int>>>& dp) {
+        if (i == p.size() || k == 0) {
+            return 0;
+        }
+        if (dp[i][k][flag] != -1)
+            return dp[i][k][flag];
+        int ans = 0;
+        if (flag) {
+            ans = max(-p[i] + solve(i + 1, k, !flag, p, dp),
+                      solve(i + 1, k, flag, p, dp));
+        } else {
+            ans = max(p[i] + solve(i + 1, k - 1, !flag, p, dp),
+                      solve(i + 1, k, flag, p, dp));
+        }
+        return dp[i][k][flag] = ans;
+    }
 };
