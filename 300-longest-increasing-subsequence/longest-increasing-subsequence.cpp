@@ -1,53 +1,20 @@
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
-        int prev = -1;
         int n = nums.size();
-        // vector<vector<int>>dp(n+3, vector<int>(n+3, 0));
-
-        // for(int prev = n-2 ; prev>=-1 ; prev--){
-        //     for(int idx = n-1 ; idx>prev ; idx--){ 
-
-        //         int pick = INT_MIN;
-        //         if(prev == -1 || nums[prev]<nums[idx]){
-        //             pick = 1 + dp[idx+1][idx+1];
-        //         }
-        //         int notPick = dp[prev+1][idx+1];
-
-        //         dp[prev+1][idx]=max(pick, notPick);
-        //     }
-        // }
-
-        // return dp[0][0];
-
-        vector<int>res;
-        for(int i = 0 ; i<n ; i++){
-            if(res.empty() || res.back()<nums[i]){
-                res.push_back(nums[i]);
-            }
-            else{
-                int idx = lower_bound(res.begin(), res.end(), nums[i]) - res.begin();
-                res[idx] = nums[i];
-            }
-        }
-
-        return res.size();
-
-        // return solve(prev, 0, nums, dp);
+        vector<vector<int>> dp(n + 1, vector<int>(n + 2, -1));
+        return solve(0, -1, nums, dp);
     }
-
-    int solve(int prev, int idx, vector<int>& nums, vector<vector<int>>& dp){
-
-        if(idx == nums.size())return 0;
-
-        if(dp[prev+1][idx]!=-1) return dp[prev+1][idx];
-
-        int pick = INT_MIN;
-        if(prev == -1 || nums[prev]<nums[idx]){
-            pick = 1 + solve(idx, idx+1, nums, dp);
+    int solve(int idx, int prev, vector<int>& nums, vector<vector<int>>& dp) {
+        if (idx == nums.size()) {
+            return 0;
         }
-        int notPick = solve(prev, idx+1, nums, dp);
-
-        return dp[prev+1][idx] = max(pick, notPick);
+        if (dp[idx][prev + 1] != -1)
+            return dp[idx][prev + 1];
+        int l = solve(idx + 1, prev, nums, dp);
+        if (prev == -1 || nums[idx] > nums[prev]) {
+            l = max(l, 1 + solve(idx + 1, idx, nums, dp));
+        }
+        return dp[idx][prev + 1] = l;
     }
 };
