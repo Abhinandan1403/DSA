@@ -1,30 +1,41 @@
 class Solution {
 public:
-    string minWindow(string s, string t) {
+    string minWindow(string s, string t){
+        if(t.size()>s.size())return "";
         unordered_map<char, int>mpp;
-        for(auto& ch : t){
-            mpp[ch]++;
+        int n = t.size();
+        for(int i = 0 ; i<n ; i++){
+            mpp[t[i]]++;
         }
-        int minIdx = -1, minLen = INT_MAX, l = 0, count = 0;
-
-        for(int r = 0 ; r<s.size() ; r++){
-            mpp[s[r]]--;
-            if(mpp[s[r]]>=0){
+        int mini = INT_MAX;
+        int l = 0;
+        int si = 0;
+        int count = 0;
+        for(int i = 0 ; i<s.size() ; i++){
+            mpp[s[i]]--;
+            if(mpp[s[i]]>=0){
                 count++;
             }
 
-            if(count == t.size()){
-                while(l<=r && count==t.size()){
-                    if(minLen>r-l+1){
-                        minLen = r-l+1;
-                        minIdx = l;
-                    }
-                    mpp[s[l]]++;
-                    if(mpp[s[l]]>0)count--;
-                    l++;
+
+            while(count == n){ 
+                if(count == n && mini > i-l+1){
+                    si = l;
+                    mini = min(mini, i-l+1);
                 }
+                mpp[s[l]]++;
+                if(mpp[s[l]]>=1){
+                    count--;
+                }
+                l++;
             }
         }
-        return minLen == INT_MAX ? "" : s.substr(minIdx, minLen);
+
+        string res = "";
+        if(mini == INT_MAX){
+            return "";
+        }
+        res = s.substr(si, mini);
+        return res;
     }
 };
