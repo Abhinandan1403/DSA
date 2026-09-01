@@ -1,30 +1,25 @@
 class Solution {
 public:
+    int solve(int i, int am, vector<int>& coins, vector<vector<int>>& dp) {
+        // base case
+        if (i == coins.size()) {
+            if (am == 0)
+                return 1;
+            else
+                return 0;
+        }
+        if (dp[i][am] != -1)
+            return dp[i][am];
+        int pick = 0;
+        if (am >= coins[i]) {
+            pick = solve(i, am - coins[i], coins, dp);
+        }
+        int notpick = solve(i + 1, am, coins, dp);
+        return dp[i][am] = pick + notpick;
+    }
     int change(int amount, vector<int>& coins) {
         int n = coins.size();
-        vector<vector<int>>dp(amount+1, vector<int>(n+1, -1));
-        return solve(amount, coins, 0, dp);
-    }
-
-    int solve(int amount, vector<int>& coins, int idx, vector<vector<int>>& dp){
-        if(idx == coins.size()){
-            return 0 ;
-        }
-
-        if(amount == 0){
-            return 1;
-        }
-
-        if(dp[amount][idx]!=-1){
-            return dp[amount][idx];
-        }
-
-        int pick = 0 ;
-        if(coins[idx]<=amount){
-            pick = solve(amount-coins[idx], coins, idx, dp);
-        }
-        int notPick = solve(amount, coins, idx+1, dp);
-
-        return dp[amount][idx] = pick+notPick;
+        vector<vector<int>> dp(n + 1, vector<int>(amount + 1, -1));
+        return solve(0, amount, coins, dp);
     }
 };
