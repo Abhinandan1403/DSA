@@ -1,35 +1,31 @@
 class Solution {
 public:
-    int cherryPickup(vector<vector<int>>& grid) {
-        int len = grid[0].size();
-        int n = grid.size();
-        vector<vector<vector<int>>>dp(len+1, vector<vector<int>>(len+1, vector<int>(n+1, -1)));
-        return solve(0, len-1, 0, grid, dp);
-    }
-
-    int solve(int i, int j, int lvl, vector<vector<int>>& grid, vector<vector<vector<int>>>& dp){
-
-        if(lvl == grid.size())return 0 ;
-
-        if(dp[i][j][lvl]!=-1)return dp[i][j][lvl];
-
-        int cherry = 0 ;
-        if(i == j){
-            cherry += grid[lvl][i];
+    int solve(int i, int j1, int j2, vector<vector<int>>& grid, int n, int m,  vector<vector<vector<int>>>&dp) {
+        if (j1 < 0 || j2 < 0 || j1 >= m || j2 >= m)
+            return -1e8;
+        if (i == n - 1) {
+            if (j1 == j2)
+                return grid[i][j1];
+            return grid[i][j1] + grid[i][j2];
         }
-        else{
-            cherry+=(grid[lvl][i] + grid[lvl][j]);
+        if(dp[i][j1][j2]!=-1) return dp[i][j1][j2];
+        int curr = grid[i][j1];
+        if (j1 != j2) {
+            curr += grid[i][j2];
         }
-        int ans = 0 ;
-        for(int x = -1 ; x<2 ; x++){
-            for(int y = -1 ; y<2 ; y++){
-                int newi = i+x , newj = j+y ;
-                if(newi>=0 && newj>=0 && newi<grid[0].size() && newj<grid[0].size()){
-                    int val = cherry + solve(newi, newj, lvl+1, grid, dp);
-                    ans = max(ans, val);
-                }
+        int maxi = 0;
+        for (int a = -1; a <= 1; a++) {
+            for (int b = -1; b <= 1; b++) {
+                int take = solve(i + 1, j1 + a, j2 + b, grid, n, m,dp);
+                maxi = max(maxi, take);
             }
         }
-        return dp[i][j][lvl] = ans ;
+        return dp[i][j1][j2]= maxi + curr;
+    }
+    int cherryPickup(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<vector<int>>>dp(n+1,vector<vector<int>>(m+1,vector<int>(m+1,-1)));
+        return solve(0, 0, m - 1, grid, n, m,dp);
     }
 };
