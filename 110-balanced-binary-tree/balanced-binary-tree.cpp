@@ -10,23 +10,25 @@
  * };
  */
 class Solution {
+    int solve(TreeNode* root){
+        if(!root)return 0;
+        
+        int lh = solve(root->left);
+        int rh = solve(root->right);
+
+        if(abs(lh - rh) > 1)return -1;
+
+        if(lh == -1)return -1;
+
+        if(rh == -1)return -1;
+
+        return 1 + max(lh, rh);
+    }
 public:
     bool isBalanced(TreeNode* root) {
-        int h = findh(root);
+        if(!root)return true;
 
-        return h != -1 ? true : false ;
-    }
-
-    int findh(TreeNode* root){
-        if(root == NULL)return 0 ;
-
-        int lh = findh(root->left);
-        int rh = findh(root->right);
-
-        if(lh == -1 || rh == -1)return -1;
-
-        if(abs(lh-rh)>1)return -1 ;
-
-        return 1+max(lh, rh);
+        int ans = solve(root);
+        return ans == -1 ? false : true;
     }
 };
